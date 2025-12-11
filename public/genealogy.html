@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Genealógico - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="index.html" class="logo">Cuerda Los Indios</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="inventory.html">Inventario</a></li>
+          <li><a href="genealogy.html">Admin Genealogía</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="section">
+      <div class="container">
+        <h1>Registro Genealógico</h1>
+        <p>Panel administrativo para ingreso de nuevos ejemplares.</p>
+      </div>
+    </header>
+
+    <section class="section section-no-top">
+      <div class="container">
+        <div class="admin-panel">
+          <h2>Registrar Nuevo Ejemplar</h2>
+          <form id="genealogyForm">
+            <div class="form-group">
+              <label for="g-name">Nombre del Ejemplar</label>
+              <input type="text" id="g-name" class="input-field" required />
+            </div>
+            <div class="form-group">
+              <label for="g-gender">Género</label>
+              <select id="g-gender" class="input-field">
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+              </select>
+            </div>
+            <div class="flex-gap-1">
+              <div class="form-group flex-1">
+                <label for="g-father">Padre</label>
+                <input
+                  type="text"
+                  id="g-father"
+                  class="input-field"
+                  placeholder="Nombre del Padre"
+                />
+              </div>
+              <div class="form-group flex-1">
+                <label for="g-mother">Madre</label>
+                <input
+                  type="text"
+                  id="g-mother"
+                  class="input-field"
+                  placeholder="Nombre de la Madre"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="g-line">Línea Genética</label>
+              <input
+                type="text"
+                id="g-line"
+                class="input-field"
+                placeholder="Ej. Kelso / Sweater"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Guardar Registro
+            </button>
+          </form>
+        </div>
+
+        <div class="records-list">
+          <h2>Registros Recientes</h2>
+          <ul id="recent-records">
+            <!-- JS population mockup -->
+            <li class="record-item">Cargando...</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Load existing (mock)
+        try {
+          const res = await fetch("/api/roosters");
+          const data = await res.json();
+          const list = document.getElementById("recent-records");
+          list.innerHTML = "";
+          data.forEach((d) => {
+            list.innerHTML += `<li class="record-item">
+                        <strong>${d.name}</strong> (${d.gender}) - Línea: ${
+              d.genealogy?.line || "N/A"
+            }
+                    </li>`;
+          });
+        } catch (e) {}
+      });
+
+      document
+        .getElementById("genealogyForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          alert("Funcionalidad de Guardado Simulada. (Requiere DB Real)");
+          // In a real app, this would POST to /api/roosters
+        });
+    </script>
+  </body>
+</html>

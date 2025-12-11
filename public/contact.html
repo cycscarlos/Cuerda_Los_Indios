@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto - Cuerda Los Indios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="index.html" class="logo">Cuerda Los Indios</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="inventory.html">Inventario</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="section">
+      <div class="container text-center">
+        <h1>Contáctanos</h1>
+        <p>Estamos a su disposición para cualquier consulta o adquisición.</p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container contact-layout">
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <h2>Información</h2>
+          <p>
+            <strong>Dirección:</strong> Carretera Principal Km 5, Sector Los
+            Indios.
+          </p>
+          <p><strong>Teléfono:</strong> +1 555-0123</p>
+          <p><strong>Email:</strong> contacto@cuerdalosindios.com</p>
+
+          <h3 class="mt-lg">Horario de Atención</h3>
+          <p>Lunes a Sábado: 8:00 AM - 6:00 PM</p>
+
+          <h3 class="mt-lg">Redes Sociales</h3>
+          <div class="social-links">
+            <a href="#" class="btn btn-secondary">Instagram</a>
+            <a href="#" class="btn btn-secondary">Facebook</a>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="contact-card">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input type="text" id="name" class="input-field" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="input-field" required />
+            </div>
+
+            <div class="form-group">
+              <label for="roosterId">Interés (Opcional)</label>
+              <select id="roosterId" class="input-field">
+                <option value="">Consulta General</option>
+                <option value="1">El Dorado</option>
+                <option value="2">Sombra Negra</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Mensaje</label>
+              <textarea
+                id="message"
+                rows="5"
+                class="input-field"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">
+              Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Simple Form Handler
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            roosterId: document.getElementById("roosterId").value,
+            message: document.getElementById("message").value,
+          };
+
+          try {
+            const res = await fetch("/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData),
+            });
+            const result = await res.json();
+            alert(result.message);
+            e.target.reset();
+          } catch (err) {
+            alert("Error enviando mensaje");
+          }
+        });
+
+      // Pre-select rooster if URL param exists
+      const urlParams = new URLSearchParams(window.location.search);
+      const roosterParam = urlParams.get("rooster");
+      if (roosterParam) {
+        const select = document.getElementById("roosterId");
+        if (select) select.value = roosterParam;
+      }
+    </script>
+  </body>
+</html>

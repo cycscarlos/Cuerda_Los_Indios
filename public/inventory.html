@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario - Cuerda Los Indios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="index.html" class="logo">Cuerda Los Indios</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="inventory.html">Inventario</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="section">
+      <div class="container">
+        <h1>Inventario General</h1>
+      </div>
+    </header>
+
+    <section class="section section-no-top">
+      <div class="container">
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>Nombre / ID</th>
+              <th>Tipo</th>
+              <th>Edad</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-body">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const response = await fetch("/api/roosters");
+          const uniqueRoosters = await response.json();
+
+          // Mocking more data by duplicating for inventory list visual
+          // In real app, this would be a separate full list
+          const roosters = [...uniqueRoosters, ...uniqueRoosters];
+
+          const tbody = document.getElementById("inventory-body");
+          roosters.forEach((r) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                        <td><strong>${r.name}</strong></td>
+                        <td>${r.gender}</td>
+                        <td>${r.age}</td>
+                        <td><span class="text-success">${r.health}</span></td>
+                        <td><a href="index.html" class="btn btn-sm btn-secondary">Ver</a></td>
+                    `;
+            tbody.appendChild(tr);
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "name": "El Dorado",
+        "image": "images/rooster1.jpg",
+        "age": "18 meses",
+        "gender": "Macho",
+        "health": "Vacunado, Desparasitado",
+        "price": 1500,
+        "description": "Un ejemplar de plumas doradas, fuerte temperamento y gran resistencia.",
+        "genealogy": {
+            "father": "Gallo Claudio",
+            "mother": "Gallina Turuleca",
+            "line": "Kelso / Sweater"
+        }
+    },
+    {
+        "id": 2,
+        "name": "Sombra Negra",
+        "image": "images/rooster2.jpg",
+        "age": "24 meses",
+        "gender": "Macho",
+        "health": "Excelente",
+        "price": 2000,
+        "description": "Gallo oscuro, rápido y certero. Ganador en varias exhibiciones locales.",
+        "genealogy": {
+            "father": "Rayo Veloz",
+            "mother": "La Negra",
+            "line": "Hatch / Grey"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Princesa",
+        "image": "images/hen1.jpg",
+        "age": "12 meses",
+        "gender": "Hembra",
+        "health": "Sana",
+        "price": 800,
+        "description": "Madre joven con excelente genética para cría.",
+        "genealogy": {
+            "father": "El Dorado",
+            "mother": "Reina del Sur",
+            "line": "Kelso"
+        }
+    }
+]
