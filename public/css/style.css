@@ -409,3 +409,140 @@ footer {
     gap: 2rem;
     flex-wrap: wrap;
 }
+
+/* --- Responsive Design & Mobile Menu --- */
+
+/* Menu Toggle Button (Hamburger) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0.5rem;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+/* Tablet & Mobile Styles */
+@media (max-width: 768px) {
+    /* Navigation */
+    .menu-toggle {
+        display: flex; /* Show hamburger on mobile */
+    }
+
+    .nav-links {
+        display: none; /* Hide links by default */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--color-primary);
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.active {
+        display: flex; /* Show when toggled */
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+
+    /* Typography & Layout */
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .section {
+        padding: 3rem 0;
+    }
+
+    /* Stacking Flex Containers */
+    .history-grid, 
+    .contact-layout {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .founder-section, 
+    .history-text,
+    .contact-info,
+    .contact-card {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .founder-img {
+        max-width: 80%; /* Don't take full width on super small screens if not needed */
+    }
+
+    /* Inventory Table Scroll */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1rem;
+        /* Custom Scrollbar for better UX */
+        scrollbar-width: auto; /* Firefox */
+        scrollbar-color: var(--color-secondary) #e0e0e0;
+    }
+
+    /* WebKit Scrollbar Styling (Chrome, Safari, Edge) */
+    .table-responsive::-webkit-scrollbar {
+        height: 12px; /* Thicker for touch */
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #e0e0e0;
+        border-radius: 6px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background-color: var(--color-secondary); /* Darker tone */
+        border-radius: 6px;
+        border: 2px solid #e0e0e0; /* Padding for visual separation */
+    }
+    
+    .inventory-table {
+        min-width: 600px; /* Force scroll if table is squeezed too much */
+    }
+
+    /* Fix Gallery Images on Mobile */
+    .card-image {
+        object-fit: contain; /* Ensure full bird is visible */
+        background-color: #f8f8f8; /* Light background for non-square images */
+        height: 65%; /* Give slightly more room to image */
+    }
+    
+    .flip-card {
+        height: 340px; /* Slightly taller to accommodate */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem; /* More space on very small screens */
+    }
+
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .stats-grid {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

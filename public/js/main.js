@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('inventory-body')) {
         renderInventory();
     }
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
 });
 
 function calculateAgeInMonths(birthDateString) {
