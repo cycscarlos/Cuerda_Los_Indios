@@ -360,10 +360,13 @@ footer {
 .text-success { color: var(--color-success); }
 .pointer-events-none { pointer-events: none; }
 .justify-center { justify-content: center; }
+.fst-italic { font-style: italic; }
 .flex-gap-1 { display: flex; gap: 1rem; }
 .mt-xs { margin-top: 0.5rem; }
 .mb-lg { margin-bottom: 2rem; }
-.mt-lg { margin-top: 2rem; }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: 3rem; }
+.mt-xxl { margin-top: 6rem; }
 
 /* History Page */
 .history-grid {

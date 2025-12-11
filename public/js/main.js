@@ -1,5 +1,5 @@
 let currentPage = 1;
-const itemsPerPage = 6;
+const itemsPerPage = 8;
 let currentFilteredRoosters = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,22 +70,19 @@ function renderGallery() {
                 <div class="flip-card-front">
                     <img src="${rooster.image}" alt="${rooster.name}" class="card-image" onerror="this.src='https://placehold.co/400x320?text=No+Image'">
                     <div class="card-details-front">
-                        <h3>${rooster.name}</h3>
-                        <p class="text-muted">${rooster.line || 'Linaje Desconocido'}</p>
-                        <span class="btn btn-sm btn-secondary mt-xs pointer-events-none">Ver Genealogía</span>
+                        <span class="btn btn-sm btn-secondary pointer-events-none">Ver Genealogía</span>
                     </div>
                 </div>
                 <div class="flip-card-back">
-                    <h3>Genealogía</h3>
-                    <div class="genealogy-tree">
-                        <div class="genealogy-item"><span class="genealogy-label">Padre:</span> ${rooster.genealogy.father}</div>
-                        <div class="genealogy-item"><span class="genealogy-label">Madre:</span> ${rooster.genealogy.mother}</div>
-                        <div class="genealogy-item"><span class="genealogy-label">Línea:</span> ${rooster.genealogy.line}</div>
+                    <h3 class="mb-sm">${rooster.name}</h3>
+                    <div class="genealogy-tree w-full" style="text-align: left;">
+                        <div class="genealogy-item"><span class="genealogy-label"><strong>Padre:</strong></span> ${rooster.genealogy.father}</div>
+                        <div class="genealogy-item"><span class="genealogy-label"><strong>Madre:</strong></span> ${rooster.genealogy.mother}</div>
+                        <div class="genealogy-item"><span class="genealogy-label"><strong>Marca No.:</strong></span> ${rooster.brand || 'N/A'}</div>
+                        <div class="genealogy-item"><span class="genealogy-label"><strong>Placa No.:</strong></span> ${rooster.plate || 'N/A'}</div>
                     </div>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">${rooster.description}</p>
-                    <div class="flex-gap-1" style="justify-content: center;">
+                    <div class="mt-md w-full text-center">
                         <a href="contact.html?rooster=${rooster.id}" class="btn btn-primary">Contactar</a>
-                        <button class="btn btn-secondary">Comprar</button>
                     </div>
                 </div>
             </div>
@@ -101,7 +98,8 @@ function renderPaginationControls(totalPages) {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
-    if (totalPages <= 1) return;
+    // Always render controls, just disable them if needed
+    // if (totalPages <= 1) return;
 
     // Prev Button
     const prevBtn = document.createElement('button');

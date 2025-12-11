@@ -5,14 +5,12 @@
         "image": "images/rooster1.jpg",
         "age": "18 meses",
         "gender": "Macho",
-        "health": "Vacunado, Desparasitado",
+        "health": "Vacunado",
         "price": 1500,
+        "brand": "M-001",
+        "plate": "P-2023-A",
         "description": "Un ejemplar de plumas doradas, fuerte temperamento y gran resistencia.",
-        "genealogy": {
-            "father": "Gallo Claudio",
-            "mother": "Gallina Turuleca",
-            "line": "Kelso / Sweater"
-        }
+        "genealogy": { "father": "Gallo Claudio", "mother": "Gallina Turuleca", "line": "Kelso / Sweater" }
     },
     {
         "id": 2,
@@ -22,12 +20,10 @@
         "gender": "Macho",
         "health": "Excelente",
         "price": 2000,
+        "brand": "M-002",
+        "plate": "P-2022-B",
         "description": "Gallo oscuro, rápido y certero. Ganador en varias exhibiciones locales.",
-        "genealogy": {
-            "father": "Rayo Veloz",
-            "mother": "La Negra",
-            "line": "Hatch / Grey"
-        }
+        "genealogy": { "father": "Rayo Veloz", "mother": "La Negra", "line": "Hatch / Grey" }
     },
     {
         "id": 3,
@@ -37,11 +33,14 @@
         "gender": "Hembra",
         "health": "Sana",
         "price": 800,
+        "brand": "M-003",
+        "plate": "P-2024-C",
         "description": "Madre joven con excelente genética para cría.",
-        "genealogy": {
-            "father": "El Dorado",
-            "mother": "Reina del Sur",
-            "line": "Kelso"
-        }
-    }
+        "genealogy": { "father": "El Dorado", "mother": "Reina del Sur", "line": "Kelso" }
+    },
+    { "id": 4, "name": "Cenizo Real", "image": "images/rooster1.jpg", "age": "20 meses", "gender": "Macho", "health": "Sano", "price": 1800, "brand": "M-004", "plate": "P-2023-D", "description": "Color ceniza único, muy codiciado.", "genealogy": { "father": "Grisáceo", "mother": "La Colorada", "line": "Grey" } },
+    { "id": 5, "name": "El Colorado", "image": "images/rooster2.jpg", "age": "19 meses", "gender": "Macho", "health": "Excelente", "price": 1600, "brand": "M-005", "plate": "P-2023-E", "description": "Plumaje rojo intenso.", "genealogy": { "father": "El Rojo", "mother": "La Pinta", "line": "Kelso / Hatch" } },
+    { "id": 6, "name": "La Blanca", "image": "images/hen1.jpg", "age": "14 meses", "gender": "Hembra", "health": "Sana", "price": 900, "brand": "M-006", "plate": "P-2024-F", "description": "Excelente para cruces.", "genealogy": { "father": "El Blanco", "mother": "La Nevada", "line": "White Claret" } },
+    { "id": 7, "name": "Giro", "image": "images/rooster1.jpg", "age": "22 meses", "gender": "Macho", "health": "Sano", "price": 2100, "brand": "M-007", "plate": "P-2022-G", "description": "Estilo de pelea agresivo.", "genealogy": { "father": "Giro Viejo", "mother": "La Gira", "line": "Giro" } },
+    { "id": 8, "name": "Azul", "image": "images/rooster2.jpg", "age": "18 meses", "gender": "Macho", "health": "Sano", "price": 1750, "brand": "M-008", "plate": "P-2024-H", "description": "Plumaje con tonos azulados.", "genealogy": { "father": "El Blue", "mother": "La Azulada", "line": "Blueface" } }
 ]
