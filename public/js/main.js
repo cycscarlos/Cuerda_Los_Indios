@@ -3,9 +3,50 @@ const itemsPerPage = 8;
 let currentFilteredRoosters = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchRoosters();
-    setupFilters();
+    if (document.getElementById('rooster-gallery')) {
+        fetchRoosters();
+        setupFilters();
+    }
+    if (document.getElementById('inventory-body')) {
+        renderInventory();
+    }
 });
+
+function calculateAgeInMonths(birthDateString) {
+    if (!birthDateString) return 0;
+    const [day, month, year] = birthDateString.split('/');
+    const birthDate = new Date(year, month - 1, day);
+    const today = new Date();
+    
+    let months = (today.getFullYear() - birthDate.getFullYear()) * 12;
+    months -= birthDate.getMonth();
+    months += today.getMonth();
+    return months <= 0 ? 0 : months;
+}
+
+async function renderInventory() {
+    try {
+        const response = await fetch('./data/roosters.json');
+        const roosters = await response.json();
+        const tbody = document.getElementById('inventory-body');
+        
+        tbody.innerHTML = '';
+        
+        roosters.forEach(r => {
+            const months = calculateAgeInMonths(r.birthDate);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${r.plate || 'N/A'}</strong></td>
+                <td>${r.gender}</td>
+                <td>${months} meses</td>
+                <td>${r.status || 'Desconocido'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('Error loading inventory:', error);
+    }
+}
 
 async function fetchRoosters() {
     try {

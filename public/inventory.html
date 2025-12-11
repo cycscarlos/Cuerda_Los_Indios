@@ -37,11 +37,10 @@
         <table class="inventory-table">
           <thead>
             <tr>
-              <th>Nombre / ID</th>
+              <th>Placa No.</th>
               <th>Tipo</th>
-              <th>Edad</th>
+              <th>Edad (Meses)</th>
               <th>Estado</th>
-              <th>Acción</th>
             </tr>
           </thead>
           <tbody id="inventory-body">
@@ -57,32 +56,6 @@
       </div>
     </footer>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        try {
-          const response = await fetch("/api/roosters");
-          const uniqueRoosters = await response.json();
-
-          // Mocking more data by duplicating for inventory list visual
-          // In real app, this would be a separate full list
-          const roosters = [...uniqueRoosters, ...uniqueRoosters];
-
-          const tbody = document.getElementById("inventory-body");
-          roosters.forEach((r) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                        <td><strong>${r.name}</strong></td>
-                        <td>${r.gender}</td>
-                        <td>${r.age}</td>
-                        <td><span class="text-success">${r.health}</span></td>
-                        <td><a href="index.html" class="btn btn-sm btn-secondary">Ver</a></td>
-                    `;
-            tbody.appendChild(tr);
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      });
-    </script>
+    <script src="js/main.js"></script>
   </body>
 </html>
