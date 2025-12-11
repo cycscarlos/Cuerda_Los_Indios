@@ -445,7 +445,8 @@ footer {
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: var(--color-primary);
+        /* background-color: var(--color-primary); */
+        background-color: rgba(74,59,42,.75);
         flex-direction: column;
         align-items: center;
         padding: 1rem 0;
