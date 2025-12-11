@@ -1,4 +1,6 @@
-let allRoosters = [];
+let currentPage = 1;
+const itemsPerPage = 6;
+let currentFilteredRoosters = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchRoosters();
@@ -9,7 +11,8 @@ async function fetchRoosters() {
     try {
         const response = await fetch('/api/roosters');
         allRoosters = await response.json();
-        renderGallery(allRoosters);
+        currentFilteredRoosters = allRoosters; // Init with all
+        renderGallery();
     } catch (error) {
         console.error('Error loading roosters:', error);
         document.getElementById('rooster-gallery').innerHTML = '<p>Error al cargar los datos.</p>';
@@ -20,46 +23,52 @@ function setupFilters() {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Remove active class from all
-            buttons.forEach(b => b.classList.remove('btn-primary'));
-            buttons.forEach(b => b.classList.add('btn-secondary')); // Reset style
-            
-            // Add active style to clicked
+            // UI Update
+            buttons.forEach(b => {
+                b.classList.remove('btn-primary');
+                b.classList.add('btn-secondary');
+            });
             btn.classList.remove('btn-secondary');
             btn.classList.add('btn-primary');
 
             const filterValue = btn.getAttribute('data-filter');
             
             if (filterValue === 'all') {
-                renderGallery(allRoosters);
+                currentFilteredRoosters = allRoosters;
             } else {
-                const filtered = allRoosters.filter(r => r.gender === filterValue);
-                renderGallery(filtered);
+                currentFilteredRoosters = allRoosters.filter(r => r.gender === filterValue);
             }
+            currentPage = 1; // Reset to first page
+            renderGallery();
         });
     });
 }
 
 
-function renderGallery(roosters) {
+function renderGallery() {
     const gallery = document.getElementById('rooster-gallery');
+    const pagination = document.getElementById('pagination');
     gallery.innerHTML = '';
     
-    if (roosters.length === 0) {
+    if (currentFilteredRoosters.length === 0) {
         gallery.innerHTML = '<p>No hay ejemplares disponibles.</p>';
+        if(pagination) pagination.innerHTML = '';
         return;
     }
 
-    roosters.forEach(rooster => {
+    // Pagination Logic
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToShow = currentFilteredRoosters.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(currentFilteredRoosters.length / itemsPerPage);
+
+    itemsToShow.forEach(rooster => {
         const card = document.createElement('div');
         card.className = 'flip-card';
-        
-        // Construct the inner HTML
         card.innerHTML = `
             <div class="flip-card-inner">
                 <div class="flip-card-front">
-                    <!-- Placeholder image if actual image fails or is missing, but trying to use src from JSON -->
-                    <img src="${rooster.image}" alt="${rooster.name}" class="card-image" onerror="this.src='https://placehold.co/400x300?text=No+Image'">
+                    <img src="${rooster.image}" alt="${rooster.name}" class="card-image" onerror="this.src='https://placehold.co/400x320?text=No+Image'">
                     <div class="card-details-front">
                         <h3>${rooster.name}</h3>
                         <p class="text-muted">${rooster.line || 'Linaje Desconocido'}</p>
@@ -83,4 +92,51 @@ function renderGallery(roosters) {
         `;
         gallery.appendChild(card);
     });
+
+    // Render Pagination Controls
+    if(pagination) renderPaginationControls(totalPages);
+}
+
+function renderPaginationControls(totalPages) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    // Prev Button
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'btn btn-secondary btn-sm';
+    prevBtn.textContent = 'Anterior';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderGallery();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+    if(currentPage === 1) prevBtn.style.opacity = '0.5';
+    pagination.appendChild(prevBtn);
+
+    // Page info
+    const info = document.createElement('span');
+    info.textContent = `Página ${currentPage} de ${totalPages}`;
+    info.style.alignSelf = 'center';
+    info.style.fontWeight = 'bold';
+    pagination.appendChild(info);
+
+    // Next Button
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-secondary btn-sm';
+    nextBtn.textContent = 'Siguiente';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderGallery();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+    if(currentPage === totalPages) nextBtn.style.opacity = '0.5';
+    pagination.appendChild(nextBtn);
 }

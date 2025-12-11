@@ -191,7 +191,7 @@ ul {
 /* Gallery Grid */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: var(--spacing-lg);
 }
 
@@ -199,8 +199,8 @@ ul {
 .flip-card {
     background-color: transparent;
     width: 100%;
-    height: 400px;
-    perspective: 1000px;
+    height: 320px; /* Reduced height */
+    perspective: 1000px; /* Essential for 3D effect */
 }
 
 .flip-card-inner {
