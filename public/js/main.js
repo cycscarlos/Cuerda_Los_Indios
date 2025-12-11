@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchRoosters() {
     try {
-        const response = await fetch('/api/roosters');
+        const response = await fetch('./data/roosters.json');
         allRoosters = await response.json();
         currentFilteredRoosters = allRoosters; // Init with all
         renderGallery();
