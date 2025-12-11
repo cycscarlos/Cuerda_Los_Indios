@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cuerda Los Indios - Galería</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="index.html" class="logo">Cuerda Los Indios</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="gallery.html">Galería</a></li>
+          <li><a href="inventory.html">Inventario</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="section hero">
+      <div class="container text-center">
+        <h1>Nuestros Ejemplares</h1>
+        <p class="hero-text">
+          Galería exclusiva de nuestros padrotes y gallinas de cría.
+        </p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <div class="filters text-center mb-lg">
+          <button class="btn btn-secondary filter-btn" data-filter="all">
+            Todos
+          </button>
+          <button class="btn btn-secondary filter-btn" data-filter="Macho">
+            Machos
+          </button>
+          <button class="btn btn-secondary filter-btn" data-filter="Hembra">
+            Hembras
+          </button>
+        </div>
+
+        <div id="rooster-gallery" class="gallery-grid">
+          <!-- Javascript will populate this -->
+          <p class="text-center">Cargando ejemplares...</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

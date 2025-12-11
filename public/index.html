@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cuerda Los Indios - Galería</title>
+    <title>Historia - Cuerda Los Indios</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,6 +18,7 @@
         <a href="index.html" class="logo">Cuerda Los Indios</a>
         <ul class="nav-links">
           <li><a href="index.html">Inicio</a></li>
+          <li><a href="gallery.html">Galería</a></li>
           <li><a href="inventory.html">Inventario</a></li>
           <li><a href="contact.html">Contacto</a></li>
         </ul>
@@ -26,30 +27,76 @@
 
     <header class="section hero">
       <div class="container text-center">
-        <h1>Nuestros Ejemplares</h1>
+        <h1>Legado y Tradición</h1>
         <p class="hero-text">
-          Galería exclusiva de nuestros padrotes y gallinas de cría.
+          Más de 30 años forjando una historia de excelencia en la cría.
         </p>
       </div>
     </header>
 
     <section class="section">
       <div class="container">
-        <div class="filters text-center mb-lg">
-          <button class="btn btn-secondary filter-btn" data-filter="all">
-            Todos
-          </button>
-          <button class="btn btn-secondary filter-btn" data-filter="Macho">
-            Machos
-          </button>
-          <button class="btn btn-secondary filter-btn" data-filter="Hembra">
-            Hembras
-          </button>
+        <div class="history-grid">
+          <div class="history-text">
+            <h2>Nuestra Historia</h2>
+            <p class="mb-md">
+              Fundada en 1990 en el corazón del sector Los Indios, nuestra
+              cuerda comenzó con un sueño humilde pero una visión ambiciosa:
+              criar gallos que no solo fueran fuertes, sino que representaran la
+              perfección genética y el espíritu indomable.
+            </p>
+            <p class="mb-md">
+              A lo largo de las décadas, hemos perfeccionado nuestras líneas a
+              través de una selección rigurosa, combinando sangre local con
+              importaciones de clase mundial. Cada ave es testimonio de años de
+              dedicación, paciencia y respeto por la naturaleza.
+            </p>
+          </div>
+          <!-- Founder/History Image -->
+          <div class="founder-section">
+            <div class="founder-card">
+              <img
+                src="https://placehold.co/400x500?text=Foto+Fundador"
+                alt="Fundador"
+                class="founder-img"
+              />
+              <p class="text-muted mt-xs" style="font-style: italic">
+                Don fundador (1950 - 2020)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-highlight">
+      <div class="container text-center">
+        <h2>Homenaje al Fundador</h2>
+        <p class="tribute-text">
+          "La calidad no es un acto, es un hábito." - Estas palabras guiaron a
+          nuestro fundador en cada paso del camino. Su pasión por los animales y
+          su integridad inquebrantable sentaron las bases de lo que hoy es
+          Cuerda Los Indios.
+        </p>
+        <div class="stats-grid">
+          <div class="contact-card text-center">
+            <h3>30+</h3>
+            <p class="text-muted">Años de Experiencia</p>
+          </div>
+          <div class="contact-card text-center">
+            <h3>50+</h3>
+            <p class="text-muted">Campeonatos Locales</p>
+          </div>
+          <div class="contact-card text-center">
+            <h3>100%</h3>
+            <p class="text-muted">Dedicación</p>
+          </div>
         </div>
 
-        <div id="rooster-gallery" class="gallery-grid">
-          <!-- Javascript will populate this -->
-          <p class="text-center">Cargando ejemplares...</p>
+        <div class="mt-xl">
+          <a href="gallery.html" class="btn btn-primary"
+            >Ver Nuestros Ejemplares</a
+          >
         </div>
       </div>
     </section>
@@ -59,7 +106,5 @@
         <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
       </div>
     </footer>
-
-    <script src="js/main.js"></script>
   </body>
 </html>
