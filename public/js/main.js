@@ -132,8 +132,9 @@ function renderGallery() {
                         <div class="genealogy-item"><span class="genealogy-label"><strong>Marca No.:</strong></span> ${rooster.brand || 'N/A'}</div>
                         <div class="genealogy-item"><span class="genealogy-label"><strong>Placa No.:</strong></span> ${rooster.plate || 'N/A'}</div>
                     </div>
-                    <div class="mt-md w-full text-center">
-                        <a href="contact.html?rooster=${rooster.id}" class="btn btn-primary">Contactar</a>
+                    <div class="mt-md w-full flex-gap-1 justify-center">
+                        <a href="genealogy.html?id=${rooster.id}" class="btn btn-secondary btn-sm" style="flex: 1;">Linaje</a>
+                        <a href="contact.html?rooster=${rooster.id}" class="btn btn-primary btn-sm" style="flex: 1;">Contactar</a>
                     </div>
                 </div>
             </div>
