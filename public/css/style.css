@@ -543,8 +543,10 @@ textarea.input-field {
     overflow-x: auto;
     margin-bottom: 1rem;
     /* Custom Scrollbar for better UX */
-    scrollbar-width: auto; /* Firefox */
-    scrollbar-color: var(--color-secondary) #e0e0e0;
+    @supports (scrollbar-width: auto) {
+      scrollbar-width: auto; /* Firefox */
+      scrollbar-color: var(--color-secondary) #e0e0e0;
+    }
   }
 
   /* WebKit Scrollbar Styling (Chrome, Safari, Edge) */
