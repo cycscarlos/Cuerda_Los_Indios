@@ -21,7 +21,8 @@ export default class TemplateLoader {
             <li><a href="gallery.html">Galería</a></li>
             <li><a href="inventory.html">Inventario</a></li>
             <li><a href="contact.html">Contacto</a></li>
-            <li><button id="help-btn" class="nav-btn-icon" title="Ayuda / Manual">?</button></li>
+            <li><button id="cart-btn" class="nav-btn-icon" title="Ver Carrito"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></button></li>
+            <li><button id="help-btn" class="nav-btn-icon" title="Ayuda / Manual"><i class="fas fa-question-circle"></i></button></li>
             </ul>
         </div>`;
 

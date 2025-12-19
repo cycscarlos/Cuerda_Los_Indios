@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Supabase</title>
+  </head>
+  <body>
+    <h1>Supabase Test</h1>
+    <div id="output">Check Console (F12)</div>
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+      const SUPABASE_URL = "https://angpgvphynohghiuvivp.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_vY5p8TGqrAcMlKmmL-Twng_Q4XSiY1c";
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      async function log(msg) {
+        const div = document.createElement("div");
+        div.textContent = msg;
+        document.body.appendChild(div);
+        console.log(msg);
+      }
+
+      async function test() {
+        await log("Connecting...");
+        const { count, error } = await supabase
+          .from("roosters")
+          .select("*", { count: "exact", head: true });
+
+        if (error) {
+          await log("ERROR: " + error.message);
+          if (error.code === "PGRST301")
+            await log(
+              "Hint: Row Level Security might be blocking access context-menu."
+            );
+        } else {
+          await log("SUCCESS: Connected to 'roosters'.");
+          await log("Total Rows: " + count);
+        }
+      }
+      test();
+    </script>
+  </body>
+</html>

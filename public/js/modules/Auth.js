@@ -30,6 +30,10 @@ export default class Auth {
         return this.user && this.user.role === 'admin';
     }
 
+    isAuthenticated() {
+        return !!this.user;
+    }
+
     getUser() {
         return this.user;
     }
