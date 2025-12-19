@@ -20,7 +20,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- D3.js -->
   </head>
-  <body>
+  <body class="page-genealogy">
     <!-- Navbar Placeholder -->
     <nav id="navbar-placeholder" style="min-height: 80px"></nav>
 
@@ -141,9 +141,33 @@
 
       document
         .getElementById("genealogyForm")
-        .addEventListener("submit", (e) => {
+        .addEventListener("submit", async (e) => {
           e.preventDefault();
-          alert("Funcionalidad de Guardado Simulada. (Requiere DB Real)");
+          const form = e.target;
+
+          const roosterData = {
+            name: form.querySelector("#g-name").value,
+            gender: form.querySelector("#g-gender").value,
+            strain: form.querySelector("#g-line").value,
+            // For now, genealogy page form mock-ups for parents are just strings,
+            // but our DB expects IDs. In a real scenario we'd need search/select for parents here too.
+            // For this step, we'll insert just the text into 'name' and 'strain' and leave parents null
+            // unless we implement the full search UI here.
+            // To respect the user constraint of "Input", we will save what we can.
+            status: "Disponible",
+          };
+
+          try {
+            const api = new ApiService();
+            await api.createRooster(roosterData);
+            alert("Registro Guardado Correctamente");
+            form.reset();
+            // Reload list
+            window.location.reload();
+          } catch (err) {
+            console.error(err);
+            alert("Error al guardar: " + err.message);
+          }
         });
     </script>
   </body>

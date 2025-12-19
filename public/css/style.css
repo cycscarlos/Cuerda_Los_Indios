@@ -6,12 +6,16 @@
   --color-background: #f4f1ea; /* Cream/Off-white */
   --color-surface: #ffffff;
   --color-text-main: #2c2c2c;
-  --color-text-muted: #666666;
+  /* --color-text-muted: #666666; */
+  --color-text-muted: #aaa7a7;
   --color-success: #2e7d32;
 
   /* Typography */
   --font-heading: "Cinzel", serif;
   --font-body: "Inter", sans-serif;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
 
   /* Spacing */
   --spacing-sm: 0.5rem;
@@ -32,7 +36,7 @@
 }
 
 body {
-  background-color: var(--color-background);
+  background-color: var(--color-background); /* Default Neutral */
   color: var(--color-text-main);
   font-family: var(--font-body);
   line-height: 1.6;
@@ -42,7 +46,13 @@ body {
   position: relative;
 }
 
-body::before {
+/* Page Specific Backgrounds */
+
+/* Home: Hero Image + Overlay */
+.page-home {
+    background-color: #000; /* Fallback */
+}
+.page-home::before {
   content: "";
   position: fixed;
   top: 0;
@@ -53,9 +63,39 @@ body::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.4;
+  opacity: 0.2; /* Dark Overlay requested */
   z-index: -1;
   pointer-events: none;
+}
+
+/* Gallery: Museum Dark Mode */
+.page-gallery {
+    background-color: #1a1a1a;
+    color: #f1f1f1;
+}
+.page-gallery .container h1, 
+.page-gallery .container p {
+    color: #e0e0e0;
+}
+.page-gallery .flip-card-front {
+    background-color: #fff; /* Cards pop */
+    color: #333;
+}
+
+/* Inventory & Genealogy (Admin/Functional): Clean Neutral */
+.page-inventory,
+.page-genealogy,
+.page-contact,
+.page-instalaciones {
+    background-color: #f8f9fa; /* Soft off-white */
+    color: #333;
+}
+
+/* Typography Overrides for Dark Mode Pages */
+.page-gallery h1, 
+.page-gallery h2, 
+.page-gallery h3 {
+    color: var(--color-accent);
 }
 
 h1,
@@ -217,11 +257,12 @@ ul {
 }
 
 /* Flip Card Component */
+/* Flip Card Component */
 .flip-card {
   background-color: transparent;
   width: 100%;
-  height: 320px; /* Reduced height */
-  perspective: 1000px; /* Essential for 3D effect */
+  height: 380px; /* Taller for modern spacing */
+  perspective: 1000px;
 }
 
 .flip-card-inner {
@@ -229,10 +270,43 @@ ul {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.6s;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth pop */
   transform-style: preserve-3d;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  border-radius: 12px;
+}
+
+/* Ensure clean back on white rows/cards */
+.inventory-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Very subtle */
   border-radius: 8px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.inventory-table th {
+  background-color: #4a3b2a; /* Keep dark brown brand */
+  color: #fff;
+  padding: 1.2rem;
+  font-weight: 600;
+  border-bottom: 2px solid #d4af37; /* Gold accent line */
+}
+
+.inventory-table td {
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  color: #444;
+}
+.inventory-table tr:last-child td {
+    border-bottom: none;
+}
+.inventory-table tr:hover td {
+    background-color: #fff9e6; /* Very light gold tint on hover */
 }
 
 .flip-card:hover .flip-card-inner {
@@ -417,6 +491,9 @@ textarea.input-field {
 }
 .mb-lg {
   margin-bottom: 2rem;
+}
+.mb-md {
+  color: var(--color-text-muted);
 }
 .mt-lg {
   margin-top: var(--spacing-lg);
@@ -679,10 +756,39 @@ textarea.input-field {
 
 /* Admin Panel (Genealogy Form) */
 .admin-panel {
-  background: rgba(255, 255, 255, 0.35);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: var(--shadow-card);
+  background: #ffffff; /* pure white */
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Soft, modern float */
   max-width: 600px;
-  margin: 0 auto 3rem auto; /* Centered with bottom spacing */
+  margin: 0 auto 3rem auto;
+  border: 1px solid #eee;
+}
+
+/* D3 Tree Container visibility fix */
+#tree-container svg {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Global Floating Logo */
+#floating-logo {
+    position: fixed;
+    top: 130px; /* Below the ~80px-100px header area */
+    right: 30px;
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    z-index: 1000; /* Ensure it stays on top */
+    pointer-events: none; /* Let clicks pass through if it overlaps content */
+    opacity: 0.9;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+@media (max-width: 768px) {
+    #floating-logo {
+        width: 60px;
+        top: 100px;
+        right: 15px;
+    }
 }

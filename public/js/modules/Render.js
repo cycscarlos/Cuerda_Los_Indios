@@ -19,6 +19,7 @@ export default class Render {
                     <div class="genealogy-tree w-full" style="text-align: left;">
                         <div class="genealogy-item"><span class="genealogy-label"><strong>Padre:</strong></span> ${rooster.genealogy?.fatherName || 'N/A'}</div>
                         <div class="genealogy-item"><span class="genealogy-label"><strong>Madre:</strong></span> ${rooster.genealogy?.motherName || 'N/A'}</div>
+                        <div class="genealogy-item"><span class="genealogy-label"><strong>Línea:</strong></span> ${rooster.strain || 'N/A'}</div>
                         <div class="genealogy-item"><span class="genealogy-label"><strong>Placa No.:</strong></span> ${rooster.plate || 'N/A'}</div>
                     </div>
                     <div class="mt-md w-full flex-gap-1 justify-center">
@@ -70,7 +71,10 @@ export default class Render {
                 <td><strong>${r.plate || 'N/A'}</strong></td>
                 <td>${r.gender}</td>
                 <td>${months}</td>
-                <td>${r.name || '-'}</td>
+                <td>
+                    ${r.name || '-'}<br>
+                    <small class="text-muted">${r.strain || ''}</small>
+                </td>
                 <td><span class="status-badge ${r.status?.toLowerCase()}">${r.status || 'Desconocido'}</span></td>
                 <td>${r.price ? `$${r.price}` : '-'}</td>
                 <td>${actions}</td>

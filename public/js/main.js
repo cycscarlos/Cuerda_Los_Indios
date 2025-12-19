@@ -311,6 +311,7 @@ function openModal(rooster) {
     form.id.value = rooster.id;
     form.plate.value = rooster.plate || '';
     form.name.value = rooster.name || '';
+    form.strain.value = rooster.strain || ''; // NEW: Strain
     form.gender.value = rooster.gender;
     form.birth_date.value = rooster.birth_date || '';
     form.price.value = rooster.price || '';

@@ -44,6 +44,13 @@ export default class TemplateLoader {
             footerPlaceholder.innerHTML = footerHTML;
         }
 
+        // Inject Global Floating Logo
+        const logoImg = document.createElement('img');
+        logoImg.id = 'floating-logo';
+        logoImg.src = 'images/logoLosIndios.png';
+        logoImg.alt = 'Logo Cuerda Los Indios';
+        document.body.appendChild(logoImg);
+
         // Initialize Mobile Menu Logic after injection
         this.initMobileMenu();
     }
