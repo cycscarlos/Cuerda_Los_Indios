@@ -91,6 +91,22 @@ ul {
 }
 
 /* Navigation */
+.nav-btn-icon {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.nav-btn-icon:hover {
+    background: white;
+    color: var(--color-primary);
+}
+
 .navbar {
   background-color: var(--color-primary);
   color: var(--color-accent);

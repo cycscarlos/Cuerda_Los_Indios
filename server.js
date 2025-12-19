@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Data Paths
-const ROOSTERS_FILE = path.join(__dirname, "data", "roosters.json");
+const ROOSTERS_FILE = path.join(__dirname, "public", "data", "roosters.json");
 // const INVENTORY_FILE = path.join(__dirname, 'data', 'inventory.json');
 
 // Routes

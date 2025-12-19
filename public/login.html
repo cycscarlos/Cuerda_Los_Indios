@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acceso Administrativo - Cuerda Los Indios</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav id="navbar-placeholder" style="min-height: 80px"></nav>
+
+    <div class="container">
+      <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form" class="login-form">
+          <input type="text" id="username" placeholder="Usuario" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Contraseña"
+            required
+          />
+          <button type="submit" class="btn btn-primary w-full">Ingresar</button>
+        </form>
+        <p id="error-msg" style="color: red; display: none; margin-top: 10px">
+          Credenciales incorrectas
+        </p>
+      </div>
+    </div>
+
+    <footer id="footer-placeholder"></footer>
+
+    <script type="module">
+      import TemplateLoader from "./js/modules/TemplateLoader.js";
+      import Auth from "./js/modules/Auth.js";
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await TemplateLoader.loadComponents();
+
+        const auth = new Auth();
+        const form = document.getElementById("login-form");
+        const errorMsg = document.getElementById("error-msg");
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const user = document.getElementById("username").value;
+          const pass = document.getElementById("password").value;
+
+          if (auth.login(user, pass)) {
+            window.location.href = "inventory.html";
+          } else {
+            errorMsg.style.display = "block";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

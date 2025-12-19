@@ -11,19 +11,12 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- D3.js -->
   </head>
   <body>
-    <nav class="navbar">
-      <div class="container nav-content">
-        <a href="index.html" class="logo">Cuerda Los Indios</a>
-        <ul class="nav-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="gallery.html">Galería</a></li>
-          <li><a href="inventory.html">Inventario</a></li>
-          <li><a href="genealogy.html">Admin Genealogía</a></li>
-        </ul>
-      </div>
-    </nav>
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" style="min-height: 80px"></nav>
 
     <header class="section">
       <div class="container">
@@ -93,11 +86,22 @@
       </div>
     </section>
 
+    <!-- Footer Placeholder -->
+    <footer id="footer-placeholder"></footer>
+
+    <script type="module" src="js/main.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
         // Load existing (mock)
         try {
-          const res = await fetch("/api/roosters");
+          const res = await fetch("/api/roosters"); // Note: This fetch might fail if server.js isn't running or path is wrong, but leaving as is per request to keep functionality.
+          // Ideally this should use the new ApiService, but for now we keep the inline logic or refactor it.
+          // Since we are "Refactoring to Modules", let's try to use the Store if possible?
+          // But this is an "Admin" page that might need raw data.
+          // I will keep the original logic but wrapped in a try/catch as it was.
+
+          // Actually, /api/roosters server route exists in server.js.
           const data = await res.json();
           const list = document.getElementById("recent-records");
           list.innerHTML = "";
@@ -108,7 +112,9 @@
             }
                     </li>`;
           });
-        } catch (e) {}
+        } catch (e) {
+          console.log("Admin API not available in static mode");
+        }
       });
 
       document
@@ -116,7 +122,6 @@
         .addEventListener("submit", (e) => {
           e.preventDefault();
           alert("Funcionalidad de Guardado Simulada. (Requiere DB Real)");
-          // In a real app, this would POST to /api/roosters
         });
     </script>
   </body>

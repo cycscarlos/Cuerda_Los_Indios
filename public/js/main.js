@@ -1,80 +1,254 @@
-let currentPage = 1;
-const itemsPerPage = 8;
-let currentFilteredRoosters = [];
+import Store from './modules/Store.js';
+import ApiService from './ApiService.js';
+import Render from './modules/Render.js';
+import TemplateLoader from './modules/TemplateLoader.js';
+import Cart from './modules/Cart.js';
+import Auth from './modules/Auth.js';
+import HelpSystem from './modules/HelpSystem.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('rooster-gallery')) {
-        fetchRoosters();
-        setupFilters();
-    }
-    if (document.getElementById('inventory-body')) {
-        renderInventory();
+// Initialize Services
+const api = new ApiService();
+const auth = new Auth();
+const help = new HelpSystem(); // Init Help System
+const store = new Store({
+    roosters: [],
+    filteredRoosters: [],
+    filter: 'all',
+    currentPage: 1,
+    itemsPerPage: 8,
+    loading: true,
+    error: null,
+    cart: []
+});
+const cart = new Cart(store, api); // Initialize Cart
+
+// ... (Rest of Init Code) ...
+
+function renderInventoryView(tbody, roosters) {
+    const isAdmin = auth.isAdmin();
+    Render.renderInventoryTable(roosters, '.inventory-table', isAdmin);
+    
+    // Attach Event Listeners to Buttons (Delegation)
+    const table = document.querySelector('.inventory-table');
+    
+    // jQuery Delegation
+    $('.inventory-table tbody').off('click').on('click', 'button', async function(e) {
+        if (!auth.isAdmin()) return; // Double protection
+        
+        e.stopPropagation(); 
+        // ... (existing button logic) ...
+        const btn = $(this);
+        const id = btn.data('id');
+        const rooster = roosters.find(r => r.id === id); 
+
+        if (btn.hasClass('btn-cart')) {
+            store.addToCart(rooster);
+            alert(`"${rooster.name}" añadido al carrito.`);
+        } else if (btn.hasClass('btn-delete')) {
+            if(confirm(`¿Estás seguro de eliminar a ${rooster.name}?`)) {
+                try {
+                    await api.deleteRooster(id);
+                    alert('Eliminado correctamente.');
+                    // Reload data
+                    const newRoosters = await api.getRoosters();
+                    store.setState({ roosters: newRoosters });
+                } catch(err) {
+                    alert('Error al eliminar: ' + err.message);
+                }
+            }
+        } else if (btn.hasClass('btn-edit')) {
+            openModal(rooster);
+        }
+    });
+
+    // Show/Hide Add Button if it exists (not implemented in HTML yet but good practice)
+}
+
+// App Initialization
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Load UI Templates
+    await TemplateLoader.loadComponents();
+
+    // 2. Determine Page Context
+    const galleryContainer = document.getElementById('rooster-gallery');
+    const inventoryBody = document.getElementById('inventory-body');
+
+    // 3. Fetch Data
+    if (galleryContainer || inventoryBody) {
+        await loadData();
     }
 
-    // Mobile Menu Toggle
-    const menuToggle = document.getElementById('mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    }
+    // 4. Setup Page Specific Logic
+    if (galleryContainer) initGallery(galleryContainer);
+    if (inventoryBody) initInventory(inventoryBody);
 });
 
-function calculateAgeInMonths(birthDateString) {
-    if (!birthDateString) return 0;
-    const [day, month, year] = birthDateString.split('/');
-    const birthDate = new Date(year, month - 1, day);
-    const today = new Date();
-    
-    let months = (today.getFullYear() - birthDate.getFullYear()) * 12;
-    months -= birthDate.getMonth();
-    months += today.getMonth();
-    return months <= 0 ? 0 : months;
-}
-
-async function renderInventory() {
+async function loadData() {
     try {
-        const response = await fetch('./data/roosters.json');
-        const roosters = await response.json();
-        const tbody = document.getElementById('inventory-body');
-        
-        tbody.innerHTML = '';
-        
-        roosters.forEach(r => {
-            const months = calculateAgeInMonths(r.birthDate);
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${r.plate || 'N/A'}</strong></td>
-                <td>${r.gender}</td>
-                <td>${months} meses</td>
-                <td>${r.status || 'Desconocido'}</td>
-            `;
-            tbody.appendChild(tr);
+        const roosters = await api.getRoosters();
+        store.setState({ 
+            roosters: roosters, 
+            filteredRoosters: roosters,
+            loading: false 
         });
     } catch (error) {
-        console.error('Error loading inventory:', error);
+        store.setState({ error: 'Error al cargar datos.', loading: false });
     }
 }
 
-async function fetchRoosters() {
-    try {
-        const response = await fetch('./data/roosters.json');
-        allRoosters = await response.json();
-        currentFilteredRoosters = allRoosters; // Init with all
-        renderGallery();
-    } catch (error) {
-        console.error('Error loading roosters:', error);
-        document.getElementById('rooster-gallery').innerHTML = '<p>Error al cargar los datos.</p>';
+// ... (Gallery Logic remains same, skipping for brevity in this tool call context if not changing) ...
+
+// --- Logic for Inventory Page ---
+function initInventory(tbody) {
+    // Initial Render
+    const state = store.getState();
+    if(state.roosters.length > 0) {
+        renderInventoryView(tbody, state.roosters);
+    }
+
+    // Subscribe
+    store.subscribe((state) => {
+        // Simple re-render optimization: only if count changes or force reload needed
+        // For DataTables, we usually rely on internal state, but here we redraw on store update
+        if(document.querySelector('.inventory-table')) {
+             renderInventoryView(tbody, state.roosters);
+        }
+    });
+    
+    // CRUD Modal Logic
+    setupModal();
+    
+    // Check URL Params for Search (from Genealogy Tree)
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search');
+    if (search && $.fn.DataTable) {
+        const table = $('.inventory-table').DataTable();
+        table.search(search).draw();
     }
 }
 
-function setupFilters() {
+function renderInventoryView(tbody, roosters) {
+    Render.renderInventoryTable(roosters, '.inventory-table');
+    
+    // Attach Event Listeners to Buttons (Delegation on Tbody/Table)
+    const table = document.querySelector('.inventory-table');
+    // Remove previous listener to avoid duplicates if any (though Render destroys table)
+    
+    table.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        const rooster = roosters.find(r => r.id === id);
+
+        if (btn.classList.contains('btn-cart')) {
+            store.addToCart(rooster);
+            alert(`"${rooster.name}" añadido al carrito.`);
+        } else if (btn.classList.contains('btn-delete')) {
+            if(confirm(`¿Estás seguro de eliminar a ${rooster.name}?`)) {
+                try {
+                    await api.deleteRooster(id);
+                    alert('Eliminado correctamente.');
+                    await loadData(); // Refresh
+                } catch(err) {
+                    alert('Error al eliminar: ' + err.message);
+                }
+            }
+        } else if (btn.classList.contains('btn-edit')) {
+            openModal(rooster);
+        }
+    });
+}
+
+// Modal Functions
+function setupModal() {
+    const modal = document.getElementById('crud-modal');
+    const closeBtn = document.getElementById('close-modal');
+    const cancelBtn = document.getElementById('cancel-modal');
+    const form = document.getElementById('rooster-form');
+
+    if (!modal) return;
+
+    const closeModal = () => modal.close();
+    closeBtn.onclick = closeModal;
+    cancelBtn.onclick = closeModal;
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Fix empty strings to null for ID references
+        if(data.father_id === "") data.father_id = null;
+        if(data.mother_id === "") data.mother_id = null;
+        
+        try {
+            if (data.id) {
+                await api.updateRooster(data.id, data);
+                alert('Actualizado correctamente');
+            } else {
+                delete data.id; // New record
+                await api.createRooster(data);
+                alert('Creado correctamente');
+            }
+            modal.close();
+            await loadData();
+        } catch (err) {
+            alert('Error al guardar: ' + err.message);
+        }
+    };
+    
+    // Add "New Rooster" button logic if it existed (not in requirements yet, but good for completeness)
+}
+
+function openModal(rooster) {
+    const modal = document.getElementById('crud-modal');
+    const form = document.getElementById('rooster-form');
+    
+    // Populate Form
+    form.id.value = rooster.id;
+    form.plate.value = rooster.plate;
+    form.name.value = rooster.name;
+    form.gender.value = rooster.gender;
+    form.birth_date.value = rooster.birth_date;
+    form.price.value = rooster.price;
+    form.status.value = rooster.status;
+    
+    // Populate Parents Selects (using store state)
+    const state = store.getState();
+    const potentialFathers = state.roosters.filter(r => r.gender === 'Macho');
+    const potentialMothers = state.roosters.filter(r => r.gender === 'Hembra');
+    
+    const fatherSelect = form.father_id;
+    fatherSelect.innerHTML = '<option value="">Seleccione...</option>';
+    potentialFathers.forEach(r => {
+        fatherSelect.innerHTML += `<option value="${r.id}" ${r.id === rooster.father_id ? 'selected' : ''}>${r.name} (${r.plate})</option>`;
+    });
+
+    const motherSelect = form.mother_id;
+    motherSelect.innerHTML = '<option value="">Seleccione...</option>';
+    potentialMothers.forEach(r => {
+        motherSelect.innerHTML += `<option value="${r.id}" ${r.id === rooster.mother_id ? 'selected' : ''}>${r.name} (${r.plate})</option>`;
+    });
+
+    modal.showModal();
+}
+
+// ... Rest of Gallery functions need to be preserved or they get overwritten
+// Since replace_file_content is mostly for contiguous blocks, I have to be careful not to delete initGallery. 
+// I will use "renderInventoryView" as anchor but re-write surrounding.
+
+// Actually, let's just replace initInventory and below.
+
+// --- Logic for Gallery Page ---
+function initGallery(container) {
+    // Setup Filter Buttons
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // UI Update
+            const filterType = btn.getAttribute('data-filter');
+            
+            // Update UI State for Buttons
             buttons.forEach(b => {
                 b.classList.remove('btn-primary');
                 b.classList.add('btn-secondary');
@@ -82,111 +256,244 @@ function setupFilters() {
             btn.classList.remove('btn-secondary');
             btn.classList.add('btn-primary');
 
-            const filterValue = btn.getAttribute('data-filter');
-            
-            if (filterValue === 'all') {
-                currentFilteredRoosters = allRoosters;
-            } else {
-                currentFilteredRoosters = allRoosters.filter(r => r.gender === filterValue);
+            // Apply Filter Logic
+            const state = store.getState();
+            let filtered = state.roosters;
+            if (filterType !== 'all') {
+                filtered = state.roosters.filter(r => r.gender === filterType);
             }
-            currentPage = 1; // Reset to first page
-            renderGallery();
+            
+            store.setState({ 
+                filter: filterType, 
+                filteredRoosters: filtered, 
+                currentPage: 1 
+            });
         });
+    });
+
+    // Subscribe to Store Updates
+    store.subscribe((state) => {
+        renderGalleryView(container, state);
     });
 }
 
-
-function renderGallery() {
-    const gallery = document.getElementById('rooster-gallery');
+function renderGalleryView(container, state) {
+    container.innerHTML = '';
     const pagination = document.getElementById('pagination');
-    gallery.innerHTML = '';
-    
-    if (currentFilteredRoosters.length === 0) {
-        gallery.innerHTML = '<p>No hay ejemplares disponibles.</p>';
+
+    if (state.loading) {
+        container.innerHTML = '<p>Cargando ...</p>';
+        return;
+    }
+
+    if (state.error) {
+        container.innerHTML = `<p>${state.error}</p>`;
+        return;
+    }
+
+    if (state.filteredRoosters.length === 0) {
+        container.innerHTML = '<p>No hay ejemplares disponibles.</p>';
         if(pagination) pagination.innerHTML = '';
         return;
     }
 
     // Pagination Logic
+    const { currentPage, itemsPerPage, filteredRoosters } = state;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const itemsToShow = currentFilteredRoosters.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(currentFilteredRoosters.length / itemsPerPage);
+    const itemsToShow = filteredRoosters.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(filteredRoosters.length / itemsPerPage);
 
+    // Render Cards
     itemsToShow.forEach(rooster => {
-        const card = document.createElement('div');
-        card.className = 'flip-card';
-        card.innerHTML = `
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <img src="${rooster.image}" alt="${rooster.name}" class="card-image" onerror="this.src='https://placehold.co/400x320?text=No+Image'">
-                    <div class="card-details-front">
-                        <span class="btn btn-sm btn-secondary pointer-events-none">Ver Genealogía</span>
-                    </div>
-                </div>
-                <div class="flip-card-back">
-                    <h3 class="mb-sm">${rooster.name}</h3>
-                    <div class="genealogy-tree w-full" style="text-align: left;">
-                        <div class="genealogy-item"><span class="genealogy-label"><strong>Padre:</strong></span> ${rooster.genealogy.father}</div>
-                        <div class="genealogy-item"><span class="genealogy-label"><strong>Madre:</strong></span> ${rooster.genealogy.mother}</div>
-                        <div class="genealogy-item"><span class="genealogy-label"><strong>Marca No.:</strong></span> ${rooster.brand || 'N/A'}</div>
-                        <div class="genealogy-item"><span class="genealogy-label"><strong>Placa No.:</strong></span> ${rooster.plate || 'N/A'}</div>
-                    </div>
-                    <div class="mt-md w-full flex-gap-1 justify-center">
-                        <a href="genealogy.html?id=${rooster.id}" class="btn btn-secondary btn-sm" style="flex: 1;">Linaje</a>
-                        <a href="contact.html?rooster=${rooster.id}" class="btn btn-primary btn-sm" style="flex: 1;">Contactar</a>
-                    </div>
-                </div>
-            </div>
-        `;
-        gallery.appendChild(card);
+        const card = Render.createRoosterCard(rooster);
+        container.appendChild(card);
     });
 
     // Render Pagination Controls
-    if(pagination) renderPaginationControls(totalPages);
+    if(pagination) renderPagination(pagination, currentPage, totalPages);
 }
 
-function renderPaginationControls(totalPages) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-
-    // Always render controls, just disable them if needed
-    // if (totalPages <= 1) return;
-
-    // Prev Button
+function renderPagination(container, currentPage, totalPages) {
+    container.innerHTML = '';
+    
+    // Prev
     const prevBtn = document.createElement('button');
     prevBtn.className = 'btn btn-secondary btn-sm';
     prevBtn.textContent = 'Anterior';
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => {
         if (currentPage > 1) {
-            currentPage--;
-            renderGallery();
+            store.setState({ currentPage: currentPage - 1 });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
     if(currentPage === 1) prevBtn.style.opacity = '0.5';
-    pagination.appendChild(prevBtn);
+    container.appendChild(prevBtn);
 
-    // Page info
+    // Info
     const info = document.createElement('span');
     info.textContent = `Página ${currentPage} de ${totalPages}`;
     info.style.alignSelf = 'center';
     info.style.fontWeight = 'bold';
-    pagination.appendChild(info);
+    container.appendChild(info);
 
-    // Next Button
+    // Next
     const nextBtn = document.createElement('button');
     nextBtn.className = 'btn btn-secondary btn-sm';
     nextBtn.textContent = 'Siguiente';
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => {
         if (currentPage < totalPages) {
-            currentPage++;
-            renderGallery();
+            store.setState({ currentPage: currentPage + 1 });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
     if(currentPage === totalPages) nextBtn.style.opacity = '0.5';
-    pagination.appendChild(nextBtn);
+    container.appendChild(nextBtn);
+}
+
+
+// --- Logic for Inventory Page ---
+function initInventory(tbody) {
+    // Initial Render
+    const state = store.getState();
+    if(state.roosters.length > 0) {
+        renderInventoryView(tbody, state.roosters);
+        checkUrlSearch();
+    }
+
+    // Subscribe
+    store.subscribe((state) => {
+        // If logic dictates re-render on search, handle it.
+        // For DataTables + Store, we might be careful not to redraw unnecessarily.
+        // But for Soft Delete updates, we need to refresh.
+        if(document.querySelector('.inventory-table')) {
+             renderInventoryView(tbody, state.roosters);
+             checkUrlSearch();
+        }
+    });
+
+    setupModal();
+}
+
+function checkUrlSearch() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search');
+    if (search && $.fn.DataTable) {
+         // Tiny timeout to ensure DT is ready
+         setTimeout(() => {
+            const table = $('.inventory-table').DataTable();
+            table.search(search).draw();
+         }, 100);
+    }
+}
+
+function renderInventoryView(tbody, roosters) {
+    const isAdmin = auth.isAdmin();
+    Render.renderInventoryTable(roosters, '.inventory-table', isAdmin);
+    
+    // Attach Event Listeners to Buttons (Delegation)
+    // We can use jQuery for delegation which persists across redraws if attached to wrapper
+    $('.inventory-table tbody').off('click').on('click', 'button', async function(e) {
+        e.stopPropagation(); // Prevent bubbling issues
+        
+        if (!auth.isAdmin()) return alert("Acceso denegado");
+        
+        const btn = $(this);
+        const id = btn.data('id');
+        const rooster = roosters.find(r => r.id === id); // NOTE: ID might be string/UUID
+
+        if (btn.hasClass('btn-cart')) {
+            store.addToCart(rooster);
+            alert(`"${rooster.name}" añadido al carrito.`);
+        } else if (btn.hasClass('btn-delete')) {
+            if(confirm(`¿Estás seguro de eliminar a ${rooster.name}?`)) {
+                try {
+                    await api.deleteRooster(id);
+                    alert('Eliminado correctamente.');
+                    // Reload data
+                    const newRoosters = await api.getRoosters();
+                    store.setState({ roosters: newRoosters });
+                } catch(err) {
+                    alert('Error al eliminar: ' + err.message);
+                }
+            }
+        } else if (btn.hasClass('btn-edit')) {
+            openModal(rooster);
+        }
+    });
+}
+
+// Modal Logic
+function setupModal() {
+    const modal = document.getElementById('crud-modal');
+    if (!modal) return;
+    
+    const closeBtn = document.getElementById('close-modal');
+    const cancelBtn = document.getElementById('cancel-modal');
+    const form = document.getElementById('rooster-form');
+
+    const closeModal = () => modal.close();
+    closeBtn.onclick = closeModal;
+    cancelBtn.onclick = closeModal;
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Handle empty foreign keys
+        if(data.father_id === "") data.father_id = null;
+        if(data.mother_id === "") data.mother_id = null;
+        
+        try {
+            if (data.id) {
+                await api.updateRooster(data.id, data);
+                alert('Actualizado correctamente');
+            } else {
+                delete data.id; // New record
+                await api.createRooster(data);
+                alert('Creado correctamente');
+            }
+            modal.close();
+            // Reload
+            const newRoosters = await api.getRoosters();
+            store.setState({ roosters: newRoosters });
+        } catch (err) {
+            alert('Error al guardar: ' + err.message);
+        }
+    };
+}
+
+function openModal(rooster) {
+    const modal = document.getElementById('crud-modal');
+    const form = document.getElementById('rooster-form');
+    
+    form.id.value = rooster.id;
+    form.plate.value = rooster.plate || '';
+    form.name.value = rooster.name || '';
+    form.gender.value = rooster.gender;
+    form.birth_date.value = rooster.birth_date || '';
+    form.price.value = rooster.price || '';
+    form.status.value = rooster.status || 'Disponible';
+    
+    // Populate Parents
+    const state = store.getState();
+    const potentialFathers = state.roosters.filter(r => r.gender === 'Macho' && r.id !== rooster.id);
+    const potentialMothers = state.roosters.filter(r => r.gender === 'Hembra' && r.id !== rooster.id);
+    
+    const fatherSelect = form.father_id;
+    fatherSelect.innerHTML = '<option value="">Seleccione...</option>';
+    potentialFathers.forEach(r => {
+        fatherSelect.innerHTML += `<option value="${r.id}" ${r.id === rooster.father_id ? 'selected' : ''}>${r.name} (${r.plate})</option>`;
+    });
+
+    const motherSelect = form.mother_id;
+    motherSelect.innerHTML = '<option value="">Seleccione...</option>';
+    potentialMothers.forEach(r => {
+        motherSelect.innerHTML += `<option value="${r.id}" ${r.id === rooster.mother_id ? 'selected' : ''}>${r.name} (${r.plate})</option>`;
+    });
+
+    modal.showModal();
 }

@@ -1,13 +1,162 @@
 [
-    { "id": 1, "name": "Gallo 1", "image": "./images/Gallo1.jpg", "birthDate": "01/06/2024", "gender": "Macho", "health": "Sano", "price": 1500, "brand": "M-001", "plate": "P-2023-01", "status": "Plumudo", "description": "Ejemplar destacado de la cuerda.", "genealogy": { "father": "Padre A", "mother": "Madre A", "line": "Kelso" } },
-    { "id": 2, "name": "Gallo 2", "image": "./images/Gallo2.jpg", "birthDate": "01/04/2024", "gender": "Macho", "health": "Sano", "price": 1600, "brand": "M-002", "plate": "P-2023-02", "status": "Cresti-Barba", "description": "Gran temperamento y fuerza.", "genealogy": { "father": "Padre B", "mother": "Madre B", "line": "Hatch" } },
-    { "id": 3, "name": "Gallo 3", "image": "./images/Gallo3.jpg", "birthDate": "01/05/2024", "gender": "Macho", "health": "Sano", "price": 1550, "brand": "M-003", "plate": "P-2023-03", "status": "Desbarbado", "description": "Plumaje impecable.", "genealogy": { "father": "Padre C", "mother": "Madre C", "line": "Sweater" } },
-    { "id": 4, "name": "Gallo 4", "image": "./images/Gallo4.jpg", "birthDate": "01/03/2024", "gender": "Macho", "health": "Sano", "price": 1700, "brand": "M-004", "plate": "P-2023-04", "status": "en Arreglo", "description": "Rápido y certero.", "genealogy": { "father": "Padre D", "mother": "Madre D", "line": "Grey" } },
-    { "id": 5, "name": "Gallo 5", "image": "./images/Gallo5.jpg", "birthDate": "15/06/2024", "gender": "Macho", "health": "Sano", "price": 1500, "brand": "M-005", "plate": "P-2023-05", "status": "Plumudo", "description": "Excelente para cría.", "genealogy": { "father": "Padre E", "mother": "Madre E", "line": "Kelso" } },
-    { "id": 6, "name": "Gallo 6", "image": "./images/Gallo6.jpg", "birthDate": "01/02/2024", "gender": "Macho", "health": "Sano", "price": 1800, "brand": "M-006", "plate": "P-2023-06", "status": "Cresti-Barba", "description": "Veterano de la cuerda.", "genealogy": { "father": "Padre F", "mother": "Madre F", "line": "Hatch" } },
-    { "id": 7, "name": "Gallo 7", "image": "./images/Gallo7.jpg", "birthDate": "15/05/2024", "gender": "Macho", "health": "Sano", "price": 1600, "brand": "M-007", "plate": "P-2023-07", "status": "Desbarbado", "description": "Futuro prometedor.", "genealogy": { "father": "Padre G", "mother": "Madre G", "line": "Sweater" } },
-    { "id": 8, "name": "Gallo 8", "image": "./images/Gallo8.jpg", "birthDate": "15/04/2024", "gender": "Macho", "health": "Sano", "price": 1650, "brand": "M-008", "plate": "P-2023-08", "status": "en Arreglo", "description": "Color intenso.", "genealogy": { "father": "Padre H", "mother": "Madre H", "line": "Grey" } },
-    { "id": 9, "name": "Gallo 9", "image": "./images/Gallo9.jpg", "birthDate": "20/06/2024", "gender": "Macho", "health": "Sano", "price": 1500, "brand": "M-009", "plate": "P-2023-09", "status": "Plumudo", "description": "Agilidad superior.", "genealogy": { "father": "Padre I", "mother": "Madre I", "line": "Kelso" } },
-    { "id": 10, "name": "Gallo 10", "image": "./images/Gallo10.jpg", "birthDate": "20/03/2024", "gender": "Macho", "health": "Sano", "price": 1750, "brand": "M-010", "plate": "P-2023-10", "status": "Cresti-Barba", "description": "Linaje puro.", "genealogy": { "father": "Padre J", "mother": "Madre J", "line": "Hatch" } },
-    { "id": 11, "name": "Gallo 11", "image": "./images/Gallo11.jpg", "birthDate": "20/05/2024", "gender": "Macho", "health": "Sano", "price": 1600, "brand": "M-011", "plate": "P-2023-11", "status": "Desbarbado", "description": "La joya de la corona.", "genealogy": { "father": "Padre K", "mother": "Madre K", "line": "Sweater" } }
+    {
+        "id": 1,
+        "name": "El Dorado",
+        "image": "images/rooster1.jpg",
+        "birthDate": "15/06/2023",
+        "gender": "Macho",
+        "health": "Vacunado",
+        "price": 1500,
+        "brand": "M-001",
+        "plate": "P-2023-A",
+        "status": "Disponible",
+        "description": "Un ejemplar de plumas doradas, fuerte temperamento y gran resistencia.",
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "Gallo Claudio",
+            "motherId": null,
+            "motherName": "Gallina Turuleca",
+            "line": "Kelso / Sweater" 
+        }
+    },
+    {
+        "id": 2,
+        "name": "Sombra Negra",
+        "image": "images/rooster2.jpg",
+        "birthDate": "15/12/2022",
+        "gender": "Macho",
+        "health": "Excelente",
+        "price": 2000,
+        "brand": "M-002",
+        "plate": "P-2022-B",
+        "status": "Vendido",
+        "description": "Gallo oscuro, rápido y certero. Ganador en varias exhibiciones locales.",
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "Rayo Veloz",
+            "motherId": null,
+            "motherName": "La Negra",
+            "line": "Hatch / Grey" 
+        }
+    },
+    {
+        "id": 3,
+        "name": "Princesa",
+        "image": "images/hen1.jpg",
+        "birthDate": "15/01/2024",
+        "gender": "Hembra",
+        "health": "Sana",
+        "price": 800,
+        "brand": "M-003",
+        "plate": "P-2024-C",
+        "status": "Disponible",
+        "description": "Madre joven con excelente genética para cría.",
+        "genealogy": { 
+            "fatherId": 1,
+            "fatherName": "El Dorado",
+            "motherId": null,
+            "motherName": "Reina del Sur",
+            "line": "Kelso" 
+        }
+    },
+    { 
+        "id": 4, 
+        "name": "Cenizo Real", 
+        "image": "images/rooster1.jpg", 
+        "birthDate": "15/04/2023", 
+        "gender": "Macho", 
+        "health": "Sano", 
+        "price": 1800, 
+        "brand": "M-004", 
+        "plate": "P-2023-D", 
+        "status": "Disponible",
+        "description": "Color ceniza único, muy codiciado.", 
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "Grisáceo",
+            "motherId": null,
+            "motherName": "La Colorada",
+            "line": "Grey" 
+        } 
+    },
+    { 
+        "id": 5, 
+        "name": "El Colorado", 
+        "image": "images/rooster2.jpg", 
+        "birthDate": "15/05/2023", 
+        "gender": "Macho", 
+        "health": "Excelente", 
+        "price": 1600, 
+        "brand": "M-005", 
+        "plate": "P-2023-E", 
+        "status": "Reservado",
+        "description": "Plumaje rojo intenso.", 
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "El Rojo",
+            "motherId": null,
+            "motherName": "La Pinta",
+            "line": "Kelso / Hatch" 
+        } 
+    },
+    { 
+        "id": 6, 
+        "name": "La Blanca", 
+        "image": "images/hen1.jpg", 
+        "birthDate": "15/10/2023", 
+        "gender": "Hembra", 
+        "health": "Sana", 
+        "price": 900, 
+        "brand": "M-006", 
+        "plate": "P-2024-F", 
+        "status": "Disponible",
+        "description": "Excelente para cruces.", 
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "El Blanco",
+            "motherId": null,
+            "motherName": "La Nevada",
+            "line": "White Claret" 
+        } 
+    },
+    { 
+        "id": 7, 
+        "name": "Giro", 
+        "image": "images/rooster1.jpg", 
+        "birthDate": "15/02/2023", 
+        "gender": "Macho", 
+        "health": "Sano", 
+        "price": 2100, 
+        "brand": "M-007", 
+        "plate": "P-2022-G", 
+        "status": "Disponible",
+        "description": "Estilo de pelea agresivo.", 
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "Giro Viejo",
+            "motherId": null,
+            "motherName": "La Gira",
+            "line": "Giro" 
+        } 
+    },
+    { 
+        "id": 8, 
+        "name": "Azul", 
+        "image": "images/rooster2.jpg", 
+        "birthDate": "15/06/2023", 
+        "gender": "Macho", 
+        "health": "Sano", 
+        "price": 1750, 
+        "brand": "M-008", 
+        "plate": "P-2024-H", 
+        "status": "Disponible",
+        "description": "Plumaje con tonos azulados.", 
+        "genealogy": { 
+            "fatherId": null,
+            "fatherName": "El Blue",
+            "motherId": null,
+            "motherName": "La Azulada",
+            "line": "Blueface" 
+        } 
+    }
 ]

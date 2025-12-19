@@ -1,0 +1,60 @@
+/**
+ * Handles Dynamic Template Injection (Navbar/Footer)
+ */
+export default class TemplateLoader {
+    
+    static async loadComponents() {
+        // We will define the HTML strings here for now to avoid multiple fetch requests until SSI/Partials are set up.
+        // In a larger app, fetch('/partials/nav.html') would be better.
+        
+        const navbarHTML = `
+        <div class="container nav-content">
+            <a href="index.html" class="logo">Cuerda Los Indios</a>
+            <button class="menu-toggle" id="mobile-menu" aria-label="Abrir menú">
+            <span></span>
+            <span></span>
+            <span></span>
+            </button>
+            <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instalaciones.html">Instalaciones</a></li>
+            <li><a href="gallery.html">Galería</a></li>
+            <li><a href="inventory.html">Inventario</a></li>
+            <li><a href="contact.html">Contacto</a></li>
+            <li><button id="help-btn" class="nav-btn-icon" title="Ayuda / Manual">?</button></li>
+            </ul>
+        </div>`;
+
+        const footerHTML = `
+        <div class="container">
+            <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
+        </div>`;
+
+        // Inject Navbar
+        const navPlaceholder = document.getElementById('navbar-placeholder');
+        if (navPlaceholder) {
+            navPlaceholder.innerHTML = navbarHTML;
+            navPlaceholder.classList.add('navbar'); // Add the class required for styling
+        }
+
+        // Inject Footer
+        const footerPlaceholder = document.getElementById('footer-placeholder');
+        if (footerPlaceholder) {
+            footerPlaceholder.innerHTML = footerHTML;
+        }
+
+        // Initialize Mobile Menu Logic after injection
+        this.initMobileMenu();
+    }
+
+    static initMobileMenu() {
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+    }
+}

@@ -12,25 +12,21 @@
     />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/cart_modal.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/intro.js/minified/introjs.min.css"
+    />
+    <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
   </head>
   <body>
-    <nav class="navbar">
-      <div class="container nav-content">
-        <a href="index.html" class="logo">Cuerda Los Indios</a>
-        <button class="menu-toggle" id="mobile-menu" aria-label="Abrir menú">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        <ul class="nav-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="instalaciones.html">Instalaciones</a></li>
-          <li><a href="gallery.html">Galería</a></li>
-          <li><a href="inventory.html">Inventario</a></li>
-          <li><a href="contact.html">Contacto</a></li>
-        </ul>
-      </div>
-    </nav>
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" style="min-height: 80px"></nav>
 
     <header class="section">
       <div class="container">
@@ -45,9 +41,12 @@
             <thead>
               <tr>
                 <th>Placa No.</th>
-                <th>Tipo</th>
+                <th>Género</th>
                 <th>Edad (Meses)</th>
+                <th>Nombre</th>
                 <th>Estado</th>
+                <th>Precio</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="inventory-body">
@@ -58,12 +57,84 @@
       </div>
     </section>
 
-    <footer>
-      <div class="container">
-        <p>&copy; 2025 Cuerda Los Indios. Todos los derechos reservados.</p>
-      </div>
-    </footer>
+    <!-- CRUD Modal -->
+    <dialog id="crud-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2 id="modal-title">Administrar Ejemplar</h2>
+        <form id="rooster-form">
+          <input type="hidden" id="rooster-id" name="id" />
 
-    <script src="js/main.js"></script>
+          <div class="form-group">
+            <label for="plate">Placa / ID *</label>
+            <input type="text" id="plate" name="plate" required />
+          </div>
+
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Género *</label>
+            <select id="gender" name="gender" required>
+              <option value="Macho">Macho</option>
+              <option value="Hembra">Hembra</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="birth-date">Fecha Nacimiento</label>
+            <input type="date" id="birth-date" name="birth_date" />
+          </div>
+
+          <div class="form-group">
+            <label for="price">Precio (USD)</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" />
+          </div>
+
+          <div class="form-group">
+            <label for="status">Estado</label>
+            <select id="status" name="status">
+              <option value="Disponible">Disponible</option>
+              <option value="Reservado">Reservado</option>
+              <option value="Vendido">Vendido</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </div>
+
+          <!-- Parents Selects (Loaded Dynamically) -->
+          <div class="form-group">
+            <label for="father-id">Padre</label>
+            <select id="father-id" name="father_id">
+              <option value="">Seleccione...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="mother-id">Madre</label>
+            <select id="mother-id" name="mother_id">
+              <option value="">Seleccione...</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" id="cancel-modal">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Footer Placeholder -->
+    <footer id="footer-placeholder"></footer>
+
+    <!-- jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
