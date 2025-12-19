@@ -1,5 +1,5 @@
 import Store from './modules/Store.js';
-import ApiService from './ApiService.js';
+import ApiService from './modules/ApiService.js';
 import Render from './modules/Render.js';
 import TemplateLoader from './modules/TemplateLoader.js';
 import Cart from './modules/Cart.js';
