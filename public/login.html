@@ -63,13 +63,20 @@
         const form = document.getElementById("login-form");
         const errorMsg = document.getElementById("error-msg");
 
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", async (e) => {
           e.preventDefault();
-          const user = document.getElementById("username").value;
-          const pass = document.getElementById("password").value;
+          const usernameInput = document.getElementById("username").value;
+          const passwordInput = document.getElementById("password").value;
 
-          if (auth.login(user, pass)) {
-            window.location.href = "inventory.html";
+          const loggedUser = await auth.login(usernameInput, passwordInput);
+
+          if (loggedUser) {
+            // Check Role for Redirection
+            if (loggedUser.role === "admin") {
+              window.location.href = "admin_dashboard.html";
+            } else {
+              window.location.href = "inventory.html";
+            }
           } else {
             errorMsg.style.display = "block";
           }

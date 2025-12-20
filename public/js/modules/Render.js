@@ -32,7 +32,7 @@ export default class Render {
         return card;
     }
 
-    static renderInventoryTable(roosters, selector = '.inventory-table', isAdmin = false) {
+    static renderInventoryTable(roosters, selector = '.inventory-table', permissions = { canEdit: false, canDelete: false }) {
         const tbody = document.querySelector(`${selector} tbody`);
         if(!tbody) return;
 
@@ -50,22 +50,23 @@ export default class Render {
             // Action Buttons based on Role
             let actions = '';
             
-            // Public Actions
-            actions += `<a href="genealogy.html?id=${r.id}" class="btn-icon" title="Ver Linaje" style="background:#17a2b8; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer; text-decoration:none;">🌳</a>`;
+            // Common Actions (View Linaje)
+            actions += `<a href="genealogy.html?id=${r.id}" class="btn-icon" title="Ver Linaje" style="background:#17a2b8; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer; text-decoration:none; margin-right: 4px;">🌳</a>`;
 
-            // Admin Actions
-            if (isAdmin) {
-                actions = `
-                    <div class="action-buttons" style="display:flex; gap:5px;">
-                        <button class="btn-icon btn-cart" data-id="${r.id}" title="Añadir al Carrito" style="background:#28a745; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">🛒</button>
-                        <button class="btn-icon btn-edit" data-id="${r.id}" title="Editar" style="background:#ffc107; color:black; border:none; padding:5px; border-radius:4px; cursor:pointer;">✏️</button>
-                        <button class="btn-icon btn-delete" data-id="${r.id}" title="Eliminar" style="background:#dc3545; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">🗑️</button>
-                        ${actions}
-                    </div>
-                `;
-            } else {
-                 actions = `<div class="action-buttons">${actions}</div>`;
+            // Permission Based Actions
+            if (permissions.canEdit) {
+                // Cart (Assuming Employees can sell)
+                 actions += `<button class="btn-icon btn-cart" data-id="${r.id}" title="Añadir al Carrito" style="background:#28a745; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer; margin-right: 4px;">🛒</button>`;
+                 
+                 // Edit
+                 actions += `<button class="btn-icon btn-edit" data-id="${r.id}" title="Editar" style="background:#ffc107; color:black; border:none; padding:5px; border-radius:4px; cursor:pointer; margin-right: 4px;">✏️</button>`;
             }
+
+            if (permissions.canDelete) {
+                 actions += `<button class="btn-icon btn-delete" data-id="${r.id}" title="Eliminar" style="background:#dc3545; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">🗑️</button>`;
+            }
+            
+            actions = `<div class="action-buttons" style="display:flex; align-items:center;">${actions}</div>`;
             
             tr.innerHTML = `
                 <td><strong>${r.plate || 'N/A'}</strong></td>

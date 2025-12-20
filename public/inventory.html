@@ -26,6 +26,17 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <script>
+      // Immediate Security Check
+      const user = localStorage.getItem("user");
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    </script>
   </head>
   <body class="page-inventory">
     <!-- Navbar Placeholder -->

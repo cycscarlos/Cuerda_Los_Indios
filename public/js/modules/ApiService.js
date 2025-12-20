@@ -155,6 +155,55 @@ export default class ApiService {
             .update({ status: 'Vendido' })
             .in('id', roosterIds);
 
+
         if (updateError) throw updateError;
+    }
+
+    // --- User Management (New) ---
+
+    async verifyUser(username, password) {
+        // Simple plain-text auth as requested for prototype
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .eq('password', password)
+            .single();
+
+        // Supabase returns error Pgrst116 if no rows found
+        if (error && error.code !== 'PGRST116') {
+            console.error("Login DB Error:", error);
+            return null;
+        }
+        
+        return data; // Returns user object or null/undefined
+    }
+
+    async getUsers() {
+        const { data, error } = await supabase
+            .from('users')
+            .select('id, username, role, created_at')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data;
+    }
+
+    async createUser(userData) {
+        // userData headers: { username, password, role }
+        const { error } = await supabase
+            .from('users')
+            .insert([userData]);
+        
+        if (error) throw error;
+    }
+
+    async deleteUser(id) {
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
     }
 }

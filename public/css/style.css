@@ -792,3 +792,70 @@ textarea.input-field {
         right: 15px;
     }
 }
+
+/* --- Admin Dashboard Styles (Refactored) --- */
+.admin-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: flex-start;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.admin-sidebar-header {
+    border-bottom: 2px solid #d4af37;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.admin-menu-list {
+    list-style: none;
+}
+
+.admin-menu-item {
+    margin-bottom: 0.5rem;
+}
+
+.admin-menu-link {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+    color: #4a3b2a;
+}
+
+.admin-menu-link.active {
+    background: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+
+.admin-main {
+    flex: 1;
+}
+
+.admin-header {
+    margin-bottom: 2rem;
+}
+
+.recent-records-container {
+    margin-top: 3rem;
+}
+
+.recent-records-list {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.record-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}

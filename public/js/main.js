@@ -31,11 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 2. Determine Page Context
         const galleryContainer = document.getElementById('rooster-gallery');
         const inventoryBody = document.getElementById('inventory-body');
+        // New Admin Dashboard Protection
+        const adminDashboardParams = document.querySelector('title').innerText.includes('Admin'); 
 
-        // SECURITY CHECK: Force Login for Inventory Page
-        if (inventoryBody) {
+        // SECURITY CHECK: Force Login for Inventory OR Admin Dashboard
+        if (inventoryBody || window.location.pathname.includes('admin_dashboard.html')) {
             if (!auth.isAuthenticated()) {
-                console.warn("Unauthorized access to inventory. Redirecting...");
+                console.warn("Unauthorized access. Redirecting...");
                 window.location.href = 'login.html';
                 return; // Stop execution
             }
@@ -228,24 +230,33 @@ function checkUrlSearch() {
 }
 
 function renderInventoryView(tbody, roosters) {
-    const isAdmin = auth.isAdmin();
-    Render.renderInventoryTable(roosters, '.inventory-table', isAdmin);
+    const permissions = {
+        canEdit: auth.canEdit(),
+        canDelete: auth.canDelete()
+    };
+    
+    Render.renderInventoryTable(roosters, '.inventory-table', permissions);
     
     // Attach Event Listeners to Buttons (Delegation on Tbody/Table)
     // We can use jQuery for delegation which persists across redraws if attached to wrapper
     $('.inventory-table tbody').off('click').on('click', 'button', async function(e) {
         e.stopPropagation(); // Prevent bubbling issues
         
-        if (!auth.isAdmin()) return alert("Acceso denegado");
-        
         const btn = $(this);
         const id = btn.data('id');
         const rooster = roosters.find(r => r.id === id); // NOTE: ID might be string/UUID
 
         if (btn.hasClass('btn-cart')) {
+            // Check permission again for safety
+            if (!auth.canEdit()) return alert("No tiene permiso para vender.");
+
             store.addToCart(rooster);
             alert(`"${rooster.name}" añadido al carrito.`);
+
         } else if (btn.hasClass('btn-delete')) {
+            // Check permission
+            if (!auth.canDelete()) return alert("Acceso denegado: Solo Administradores.");
+
             if(confirm(`¿Estás seguro de eliminar a ${rooster.name}?`)) {
                 try {
                     await api.deleteRooster(id);
@@ -258,6 +269,8 @@ function renderInventoryView(tbody, roosters) {
                 }
             }
         } else if (btn.hasClass('btn-edit')) {
+            // Check permission
+            if (!auth.canEdit()) return alert("Acceso denegado.");
             openModal(rooster);
         }
     });

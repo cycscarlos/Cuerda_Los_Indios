@@ -36,6 +36,47 @@ export default class TemplateLoader {
         if (navPlaceholder) {
             navPlaceholder.innerHTML = navbarHTML;
             navPlaceholder.classList.add('navbar'); // Add the class required for styling
+
+            // Dynamic Admin Link
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                if (userData && userData.role === 'admin') {
+                    const navLinks = navPlaceholder.querySelector('.nav-links');
+                    const adminLi = document.createElement('li');
+                    adminLi.innerHTML = `<a href="admin_dashboard.html" style="color: #d4af37 !important; font-weight: 700;"> <i class="fas fa-crown"></i> Panel Admin</a>`;
+                    
+                    // Insert before Cart (which is the first button usually) or just append to end of list
+                    // Current list: Home, Inst, Gal, Inv, Cont, Cart, Help
+                    // Let's insert it before the Cart button for visibility
+                    const cartBtn = navPlaceholder.querySelector('#cart-btn');
+                    if (cartBtn && cartBtn.parentElement) {
+                        navLinks.insertBefore(adminLi, cartBtn.parentElement);
+                    } else {
+                        navLinks.appendChild(adminLi);
+                    }
+                }
+            } catch (e) {
+                console.error("Auth check failed", e);
+            }
+
+            // Dynamic Logout Button
+             try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                if (userData) {
+                    const navLinks = navPlaceholder.querySelector('.nav-links');
+                    const logoutLi = document.createElement('li');
+                    logoutLi.innerHTML = `<a href="#" id="logout-btn" style="color: #ff6b6b;"><i class="fas fa-sign-out-alt"></i> Salir</a>`;
+                    
+                    // Add listener
+                    logoutLi.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('user');
+                        window.location.href = 'login.html';
+                    });
+
+                    navLinks.appendChild(logoutLi);
+                }
+            } catch (e) { console.error(e); }
         }
 
         // Inject Footer
